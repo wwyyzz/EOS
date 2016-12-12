@@ -12,6 +12,7 @@ import xlwt
 import os
 
 
+
 def get_eos_data():
     """
     功能：通过pickle获取eos_data字典数据
@@ -22,7 +23,7 @@ def get_eos_data():
     with open(r".\eos_data\eos-data", 'rb') as f:
         eos_data = pickle.load(f)
 
-    print("共计记录：")
+    print("共有记录：")
     print(len(eos_data))
     return eos_data
 
@@ -38,7 +39,7 @@ def get_device_type(version_info):
      H3C SR6608 uptime is 9 weeks, 4 days, 2 hours, 17 minutes
      Slot 0: RPE-X1 uptime is 9 weeks, 4 days, 2 hours, 17 minutes
     返回：单台设备的型号、板卡名称、序列号
-	"""
+    """
     pattern_h3c = re.compile(r'\n(H3C\s.*)\suptime\sis')
     pattern_other = re.compile(r'\n(.*)\suptime\sis')
 
@@ -58,14 +59,14 @@ def get_device_type(version_info):
 def get_device_info(version_info, manu_info):
     """
     功能：获取设备信息信息
-	通过正则，查找所有的DEVICE_NAME、DEVICE_SERIAL_NUMBER信息放入列表中
-	Slot 3:
+    通过正则，查找所有的DEVICE_NAME、DEVICE_SERIAL_NUMBER信息放入列表中
+    Slot 3:
     DEVICE_NAME:FIP-200
     DEVICE_SERIAL_NUMBER:210231A763B103000062
     MAC_ADDRESS:0023-89A6-B3F4
     MANUFACTURING_DATE:2010-03-15
     VENDOR_NAME:H3C
-	返回：单台设备的型号、板卡名称、序列号
+    返回：单台设备的型号、板卡名称、序列号
     :param version_info:
     :param manu_info:
     :return: 单台设备的型号、板卡名称、序列号
@@ -81,20 +82,20 @@ def get_device_info(version_info, manu_info):
         device_sn = re.findall(pattern_device_sn, manu_info)
         manu_info_list = [[a, b] for a, b in zip(device_name, device_sn)]
     else:
-        manu_info_list = [['unkown', '  unknow']]
+        manu_info_list = [['unknown', '   unknown']]
 
     device_info = [device_type, manu_info_list]
-    print("device_info ============")
-    print(device_info)
+    # print("device_info ============")
+    # print(device_info)
     return device_info
 
 
 def get_summary_of_device(summary_list):
     """
-	功能：获取板块的汇总统计信息
-	将输入列表保存到数据库中，使用SQL进行数据汇总统计
-	返回：基于型号、板卡的数量汇总
-	"""
+    功能：获取板块的汇总统计信息
+    将输入列表保存到数据库中，使用SQL进行数据汇总统计
+    返回：基于型号、板卡的数量汇总
+    """
 
     #    conn = sqlite3.connect(r'D:\1-MY\2-Code\Python\EOS\device.db')
     conn = sqlite3.connect(r'C:\MyCode\EOS\device.db')
@@ -116,6 +117,7 @@ def get_summary_of_device(summary_list):
     summary_of_device = c.fetchall()
     c.close()
 
+
     result_list = []
     for moudle in summary_of_device:
         moudle_list = list(moudle)
@@ -133,12 +135,12 @@ def get_summary_of_device(summary_list):
 
 def get_devices_all(filename):
     """
-	功能：获取无重复的设备型号、板卡型号和序列号sn
-	读取指定文件,调用get_device_info 对 display version 和 display device manuinfo 信息进行解析，获取设备型号、版本型号和序列号sn
-	对于重复的信息进行去重
-	返回：无重复数据的列表
-	['H3C MSR30-11', [['MSR 30-11', '210235A274B081000034'], ['RT-XMIM-24FSW', '210231A77BB081000272']]]
-	"""
+    功能：获取无重复的设备型号、板卡型号和序列号sn
+    读取指定文件,调用get_device_info 对 display version 和 display device manuinfo 信息进行解析，获取设备型号、版本型号和序列号sn
+    对于重复的信息进行去重
+    返回：无重复数据的列表
+    ['H3C MSR30-11', [['MSR 30-11', '210235A274B081000034'], ['RT-XMIM-24FSW', '210231A77BB081000272']]]
+    """
     devices_all = []
     device = []
 
