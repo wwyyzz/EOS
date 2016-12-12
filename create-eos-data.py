@@ -1,4 +1,4 @@
-#coding=utf-8
+# coding=utf-8
 
 """
 
@@ -14,22 +14,22 @@ def pickle_data(eos_data):
     with open(r".\eos_data\eos-data", 'wb') as f:
         pickle.dump(eos_data, f)
 
+
 def get_data(path):
     f = open(path, encoding='utf-8')
     return f.readlines()
 
-eos_data ={}
+
+eos_data_dict = {}
 PATH = r".\eos_data\eos-data.txt"
 
 lines = get_data(PATH)
 
 for line in lines:
     field = line.split(',')
-    eos_data[field[0]] = field[1:]
+    eos_data_dict[field[0]] = field[1:]
 
-print(eos_data["0231A84Q"])
-print(len(eos_data))
+print(eos_data_dict["0231A84Q"])
+print(len(eos_data_dict))
 
-pickle_data(eos_data)
-
-
+pickle_data(eos_data_dict)

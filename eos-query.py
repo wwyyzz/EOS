@@ -12,7 +12,6 @@ import xlwt
 import os
 
 
-
 def get_eos_data():
     """
     功能：通过pickle获取eos_data字典数据
@@ -23,8 +22,7 @@ def get_eos_data():
     with open(r".\eos_data\eos-data", 'rb') as f:
         eos_data = pickle.load(f)
 
-    print("共有记录：")
-    print(len(eos_data))
+    print("共有记录：" + str(len(eos_data)))
     return eos_data
 
 
@@ -104,7 +102,7 @@ def get_summary_of_device(summary_list):
     c.execute("delete from DEVICE;")
     c.execute("update sqlite_sequence SET seq = 0 where name ='DEVICE';")
 
-    print("write_db debug...................")
+    print("write_db ...................")
 
     for device in summary_list:
         for num in range(len(device[1])):
@@ -116,7 +114,6 @@ def get_summary_of_device(summary_list):
         "SELECT device_type, module_type, bom, COUNT(module_type) from DEVICE GROUP BY device_type, module_type ORDER BY device_type, module_type")
     summary_of_device = c.fetchall()
     c.close()
-
 
     result_list = []
     for moudle in summary_of_device:
@@ -142,7 +139,6 @@ def get_devices_all(filename):
     ['H3C MSR30-11', [['MSR 30-11', '210235A274B081000034'], ['RT-XMIM-24FSW', '210231A77BB081000272']]]
     """
     devices_all = []
-    device = []
 
     book = xlrd.open_workbook(filename)
     sh = book.sheet_by_index(0)
@@ -160,7 +156,7 @@ def get_devices_all(filename):
     return devices_all_duplicate_removal
 
 
-def write_xls(result, output_filename):
+def write_xls(result, filename):
     """
     输入: 结果列表,保存文件名
     将汇总和查询结果写入到输出xls文件中
@@ -181,7 +177,7 @@ def write_xls(result, output_filename):
             sheet1.write(n, i, line[i])
         n += 1
 
-    book.save(output_filename)
+    book.save(filename)
 
 
 '''
@@ -199,7 +195,7 @@ files = os.listdir(r'.\\test-input\\')
 for filename in files:
     PATH = INPUT_DIR + filename
     output_filename = OUTPUT_DIR + filename.split('.')[0] + r'-summary.xls'
-    print(output_filename)
+    print(r"保存文件名为:" + output_filename)
     devices_all_duplicate_removal = get_devices_all(PATH)
     summary_of_device = get_summary_of_device(devices_all_duplicate_removal)
     write_xls(summary_of_device, output_filename)
