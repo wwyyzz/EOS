@@ -114,8 +114,8 @@ def count_moudle(summary_list):
     conn.commit()
     c.execute(
         "SELECT device_type, module_type, bom, COUNT(module_type) from DEVICE "
-        "GROUP BY device_type, module_type "
-        "ORDER BY device_type, module_type")
+        "GROUP BY module_type "
+        "ORDER BY device_type")
     summary_of_device = c.fetchall()
     c.close()
 
@@ -130,7 +130,8 @@ def count_moudle(summary_list):
             result = moudle_list + ['N/A'] * 7
 
         result_list.append(result)
-
+    for l1 in result_list:
+        print(l1)
     return result_list
 
 
