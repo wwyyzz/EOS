@@ -186,7 +186,7 @@ def write_xls(result, file):
         sheet1.col(i).width = 256 * 20
         sheet1.write(0, i, row0[i], style)
 
-    # 数居
+    # 数据写入xls
     row_number = 1
     for line in result:
         for col in range(0, 11):
