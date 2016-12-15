@@ -127,11 +127,11 @@ def count_moudle(summary_list):
         if eos_query is not None:
             result = moudle_list + eos_query
         else:
-            result = moudle_list + ['N/A'] * 7
+            result = moudle_list + ['N/A'] * 6
 
         result_list.append(result)
-    for l1 in result_list:
-        print(l1)
+    # for l1 in result_list:
+    #     print(l1)
     return result_list
 
 
@@ -158,7 +158,7 @@ def get_all_devices_moudle(file):
 
     all_devices_moudle_duplicate_removal.sort()
 
-    print(all_devices_moudle_duplicate_removal)
+    # print(all_devices_moudle_duplicate_removal)
     return all_devices_moudle_duplicate_removal
 
 
@@ -179,17 +179,20 @@ def write_xls(result, file):
     style.pattern = pattern
 
     row0 = [u'型号', u'板卡类型', u'BOM编码', u'数量',
-            u"产品线", u"所属PDT",
-            u"EOM DCP实际时间",
-            u"EOS DCP计划时间", u"EOS DCP实际时间", u"EOS公告上网实际时间", u"EOS公告上网计划时间"]
+            u"EOS DCP实际时间", u"EOS DCP计划时间",
+            u"EOS公告上网实际时间", u"EOS公告上网计划时间",
+            u"EOL DCP实际", u"EOL DCP计划"]
     for i in range(0, len(row0)):
         sheet1.col(i).width = 256 * 20
+        print(row0[i])
         sheet1.write(0, i, row0[i], style)
 
-    # 数居
+    # 数据写入xls文件
     row_number = 1
+
     for line in result:
-        for col in range(0, 11):
+        print(line)
+        for col in range(0, len(row0) ):
             sheet1.write(row_number, col, line[col])
         row_number += 1
 

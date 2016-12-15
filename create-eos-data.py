@@ -21,15 +21,17 @@ def get_data(path):
 
 
 eos_data_dict = {}
-PATH = r".\eos_data\eos-data.txt"
+PATH = r".\eos_data\eox-1117.txt"
 
 lines = get_data(PATH)
 
 for line in lines:
-    field = line.split(',')
-    eos_data_dict[field[0]] = field[1:]
+    # print(line)
+    field = line.replace('\n', '').split(',')
+    eos_data_dict[field[2]] = field[7:9] + field[12:14] + field[9:11]
 
 print(eos_data_dict["0231A84Q"])
+print(eos_data_dict)
 print(len(eos_data_dict))
 
 pickle_data(eos_data_dict)
