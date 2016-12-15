@@ -172,28 +172,59 @@ def write_xls(result, file):
     sheet1 = book.add_sheet(u'sheet1', cell_overwrite_ok=True)
 
     # 写入表头数居
-    pattern = xlwt.Pattern()
-    pattern.pattern = xlwt.Pattern.SOLID_PATTERN
-    pattern.pattern_fore_colour = 5
-    style = xlwt.XFStyle()
-    style.pattern = pattern
+    #设置背景色
+    pattern_title = xlwt.Pattern()
+    pattern_title.pattern = xlwt.Pattern.SOLID_PATTERN
+    pattern_title.pattern_fore_colour = 22
+    fnt_title = xlwt.Font()
+    fnt_title.colour_index = 16
+    pattern_side = xlwt.Pattern()
+    pattern_side.pattern = xlwt.Pattern.SOLID_PATTERN
+    pattern_content = xlwt.Pattern()
+    pattern_content.pattern = xlwt.Pattern.SOLID_PATTERN
+    pattern_content.pattern_fore_colour = 26
 
-    row0 = [u'型号', u'板卡类型', u'BOM编码', u'数量',
-            u"EOS DCP实际时间", u"EOS DCP计划时间",
-            u"EOS公告上网实际时间", u"EOS公告上网计划时间",
-            u"EOL DCP实际", u"EOL DCP计划"]
-    for i in range(0, len(row0)):
+    # 设置对齐方式
+    alignment = xlwt.Alignment()
+    alignment.horz = xlwt.Alignment.HORZ_CENTER
+
+    # 设置边框
+    borders = xlwt.Borders()
+    borders.left = 1
+    borders.right = 1
+    borders.top = 1
+    borders.bottom = 1
+
+    style_title = xlwt.XFStyle()
+    style_title.pattern = pattern_title
+    style_title.alignment = alignment
+    style_title.font = fnt_title
+    style_title.borders = borders
+    style_content = xlwt.XFStyle()
+    style_content.pattern = pattern_content
+    style_content.borders = borders
+
+    # row0 = [u'型号', u'板卡类型', u'BOM编码', u'数量',
+    #         u"EOS DCP实际时间", u"EOS DCP计划时间",
+    #         u"EOS公告上网实际时间", u"EOS公告上网计划时间",
+    #         u"EOL DCP实际", u"EOL DCP计划"]
+
+    row0 = [u'华三已停止或即将停止软硬件支持的设备统计']
+    row1 = [u'所属系列', u'类别', u'数量',u'型号明细'
+            u"停止销售日", u"软件停止维护日",u"停止服务日",u"后继产品"]
+    sheet1.write_merge(0, 0, 0, 6, row0, style_title)
+    for i in range(0, len(row1)):
         sheet1.col(i).width = 256 * 20
-        print(row0[i])
-        sheet1.write(0, i, row0[i], style)
+        print(row1[i])
+        sheet1.write(1, i, row1[i], style_title)
 
     # 数据写入xls文件
-    row_number = 1
+    row_number = 2
 
     for line in result:
         print(line)
         for col in range(0, len(row0) ):
-            sheet1.write(row_number, col, line[col])
+            sheet1.write(row_number, col, line[col],style_content)
         row_number += 1
 
     book.save(file)
