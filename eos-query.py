@@ -10,6 +10,7 @@ import sqlite3
 import xlrd
 import xlwt
 import os
+from collections import Counter
 
 
 def get_eos_data():
@@ -93,11 +94,17 @@ def count_moudle(summary_list):
     将输入列表保存到数据库中，使用SQL进行数据汇总统计
     返回：基于型号、板卡的数量汇总
     """
+    device_list = []
+    for l2 in summary_list:
+        print(l2)
+        device_list.append(l2[0])
+    # aaa = Counter(device_list)
+    # for l3 in summary_list:
+    #     print(aaa.get(l3[0]))
 
     # conn = sqlite3.connect(r'D:\1-MY\2-Code\Python\EOS\device.db')
     # conn = sqlite3.connect(r'C:\MyCode\EOS\device.db')
     conn = sqlite3.connect(r'.\device.db')
-    # C:\MyCode\EOS
     c = conn.cursor()
 
     c.execute("delete from DEVICE;")
@@ -121,6 +128,7 @@ def count_moudle(summary_list):
 
     result_list = []
     for moudle in summary_of_device:
+        # print(moudle)
         moudle_list = list(moudle)
         #    result_list.append((list)eos_data.get(moudle[2]))
         eos_query = eos_data_dict.get(moudle[2])
@@ -158,7 +166,8 @@ def get_all_devices_moudle(file):
 
     all_devices_moudle_duplicate_removal.sort()
 
-    # print(all_devices_moudle_duplicate_removal)
+    # for l2 in all_devices_moudle_duplicate_removal:
+    #     print(l2)
     return all_devices_moudle_duplicate_removal
 
 
@@ -171,18 +180,20 @@ def write_xls(result, file):
     book = xlwt.Workbook()
     sheet1 = book.add_sheet(u'sheet1', cell_overwrite_ok=True)
 
-    # 写入表头数居
-    #设置背景色
+
+    #设置背景色, 22=灰色  26=淡黄色
     pattern_title = xlwt.Pattern()
     pattern_title.pattern = xlwt.Pattern.SOLID_PATTERN
     pattern_title.pattern_fore_colour = 22
-    fnt_title = xlwt.Font()
-    fnt_title.colour_index = 16
     pattern_side = xlwt.Pattern()
     pattern_side.pattern = xlwt.Pattern.SOLID_PATTERN
     pattern_content = xlwt.Pattern()
     pattern_content.pattern = xlwt.Pattern.SOLID_PATTERN
     pattern_content.pattern_fore_colour = 26
+
+    #设置字体颜色为红色
+    fnt_title = xlwt.Font()
+    fnt_title.colour_index = 16
 
     # 设置对齐方式
     alignment = xlwt.Alignment()
@@ -209,20 +220,19 @@ def write_xls(result, file):
     #         u"EOS公告上网实际时间", u"EOS公告上网计划时间",
     #         u"EOL DCP实际", u"EOL DCP计划"]
 
+    # 写入表头数据
     row0 = [u'华三已停止或即将停止软硬件支持的设备统计']
     row1 = [u'所属系列', u'类别', u'数量',u'型号明细'
             u"停止销售日", u"软件停止维护日",u"停止服务日",u"后继产品"]
     sheet1.write_merge(0, 0, 0, 6, row0, style_title)
     for i in range(0, len(row1)):
         sheet1.col(i).width = 256 * 20
-        print(row1[i])
         sheet1.write(1, i, row1[i], style_title)
 
-    # 数据写入xls文件
+    # 汇总数据写入xls文件
     row_number = 2
 
     for line in result:
-        print(line)
         for col in range(0, len(row0) ):
             sheet1.write(row_number, col, line[col],style_content)
         row_number += 1
