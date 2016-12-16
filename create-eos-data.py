@@ -28,12 +28,10 @@ lines = get_data(PATH)
 for line in lines:
     # print(line)
     field = line.replace('\n', '').split(',')
-    print (field[2])
-    print(field[5:7] + field[10:12] + field[7:9] )
     eos_data_dict[field[2]] = field[5:7] + field[10:12] + field[7:9]
 
 print(eos_data_dict["0231A84Q"])
-print(eos_data_dict)
+# print(eos_data_dict)
 print(len(eos_data_dict))
 
 pickle_data(eos_data_dict)

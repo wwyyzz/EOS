@@ -95,12 +95,22 @@ def count_moudle(summary_list):
     返回：基于型号、板卡的数量汇总
     """
     device_list = []
+    device_count_list = []
     for l2 in summary_list:
         print(l2)
         device_list.append(l2[0])
-    # aaa = Counter(device_list)
+    device_count = Counter(device_list)
+    # print(device_count)
+    for k in device_count.keys():
+        device_count_list.append([k,[k, device_count.get(k)]])
+    print(device_count_list)
+
+    summary_list += device_count_list
+    summary_list.sort()
+    for l in summary_list:
+        print(l)
     # for l3 in summary_list:
-    #     print(aaa.get(l3[0]))
+    #     print(aaa.keys())
 
     # conn = sqlite3.connect(r'D:\1-MY\2-Code\Python\EOS\device.db')
     # conn = sqlite3.connect(r'C:\MyCode\EOS\device.db')
