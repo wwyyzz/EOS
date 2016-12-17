@@ -69,6 +69,22 @@ def get_device_moudle(version_info, manu_info):
     :param manu_info:
     :return: 单台设备的型号、板卡名称、序列号
     """
+    add_chassis = ['MSR50-40', 'MSR56-60',
+                   'S7502E', 'S7503E-S', 'S7506E', 'S7510E',
+                   'SR6608']
+    chassis_dict ={
+        'H3C MSR30': 'box',
+        'H3C MSR50': 'chassis',
+        'H3C S3100': 'box',
+        'H3C S3600': 'box',
+        'H3C S5120': 'box',
+        'H3C S5800': 'box',
+        'H3C S7502': 'chassis',
+        'H3C S7503': 'chassis',
+        'H3C S7506': 'chassis',
+        'H3C S7510': 'chassis',
+        'H3C SR660': 'chassis',
+                   }
 
     device_type = get_device_type(version_info)
 
@@ -76,9 +92,18 @@ def get_device_moudle(version_info, manu_info):
     pattern_device_sn = re.compile(r'DEVICE[_\s]SERIAL[_\s]NUMBER\s*:\s*(\S+)\n')
 
     if device_type[0:3] == 'H3C':
+
+
         device_name = re.findall(pattern_device_name, manu_info)
         device_sn = re.findall(pattern_device_sn, manu_info)
         manu_info_list = [[a, b] for a, b in zip(device_name, device_sn)]
+
+        series = device_type.split(' ')[1]
+
+        if series in  add_chassis:
+            print([series, '21000000000123456789'])
+            manu_info_list.append([series, '21000000000123456789'])
+        print(manu_info_list)
     else:
         manu_info_list = [['unknown', '   unknown']]
 
@@ -95,12 +120,14 @@ def count_moudle(summary_list):
     返回：基于型号、板卡的数量汇总
     """
     device_list = []
-    for l2 in summary_list:
-        print(l2)
-        device_list.append(l2[0])
+    # for l2 in summary_list:
+    #     print(l2)
+    #     device_list.append(l2[0])
     # aaa = Counter(device_list)
-    # for l3 in summary_list:
-    #     print(aaa.get(l3[0]))
+    # print (aaa)
+    # for l3 in aaa:
+    #     l4 = [l3, aaa.get(l3)]
+    #     print(l4)
 
     # conn = sqlite3.connect(r'D:\1-MY\2-Code\Python\EOS\device.db')
     # conn = sqlite3.connect(r'C:\MyCode\EOS\device.db')
@@ -125,6 +152,7 @@ def count_moudle(summary_list):
         "ORDER BY device_type")
     summary_of_device = c.fetchall()
     c.close()
+    print(summary_of_device)
 
     result_list = []
     for moudle in summary_of_device:
@@ -140,6 +168,7 @@ def count_moudle(summary_list):
         result_list.append(result)
     # for l1 in result_list:
     #     print(l1)
+    result_list.sort()
     return result_list
 
 
@@ -233,6 +262,7 @@ def write_xls(result, file):
     row_number = 2
 
     for line in result:
+        print(line)
         for col in range(0, len(row0) ):
             sheet1.write(row_number, col, line[col],style_content)
         row_number += 1
