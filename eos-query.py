@@ -73,26 +73,29 @@ def get_device_moudle(version_info, manu_info):
                    'S7502E', 'S7503E-S', 'S7506E', 'S7510E',
                    'SR6608']
     chassis_dict ={
-        'H3C MSR30': 'box',
-        'H3C MSR50': 'chassis',
-        'H3C S3100': 'box',
-        'H3C S3600': 'box',
-        'H3C S5120': 'box',
-        'H3C S5800': 'box',
-        'H3C S7502': 'chassis',
-        'H3C S7503': 'chassis',
-        'H3C S7506': 'chassis',
-        'H3C S7510': 'chassis',
-        'H3C SR660': 'chassis',
+        'MSR30-': u'盒式',
+        'MSR50-': u'机箱',
+        'S3100-': u'盒式',
+        'S3100v': u'盒式',
+        'S3600-': u'盒式',
+        'S5120s': u'盒式',
+        'S5800-': u'盒式',
+        'S7502E': u'机箱',
+        'S7503E': u'机箱',
+        'S7506E': u'机箱',
+        'S7510E': u'机箱',
+        'SR6608': u'机箱',
                    }
 
     device_type = get_device_type(version_info)
+    #TODO 根据型号获取系列
+
 
     pattern_device_name = re.compile(r'DEVICE[_\s]NAME\s*:\s*(.+)\n')
     pattern_device_sn = re.compile(r'DEVICE[_\s]SERIAL[_\s]NUMBER\s*:\s*(\S+)\n')
 
     if device_type[0:3] == 'H3C':
-
+        catalog = chassis_dict.get(device_type[0:9], u'板卡')
 
         device_name = re.findall(pattern_device_name, manu_info)
         device_sn = re.findall(pattern_device_sn, manu_info)
@@ -101,8 +104,10 @@ def get_device_moudle(version_info, manu_info):
         series = device_type.split(' ')[1]
 
         if series in  add_chassis:
-            print([series, '21000000000123456789'])
             manu_info_list.append([series, '21000000000123456789'])
+
+        for moudle in manu_info_list:
+            moudle.append(chassis_dict.get(moudle[0][0:6], u'板卡'))
         print(manu_info_list)
     else:
         manu_info_list = [['unknown', '   unknown']]
