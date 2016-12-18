@@ -5,7 +5,8 @@ c = conn.cursor()
 
 c.execute('''CREATE TABLE DEVICE
     (id integer PRIMARY KEY autoincrement,
-    device_type text, 
+    series_belong text,
+    catalong text,
     module_type text, 
     module_sn text, 
     bom text);''')
