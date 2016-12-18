@@ -134,18 +134,46 @@ def get_device_moudle(device_type, manu_info):
         'WX5510': 'WX5500E',
                    }
 
-    series = device_type.split(' ')[1]
-    #TODO 根据型号获取系列
-    # print(series)
-    # print(series_dict.get(series, 'unknown'))
-    series_belong = series_dict.get(series[0:6], 'unknown')
+    series_catalog_dict ={
+        'MSR20-': 'MSR20',
+        'MSR26-': 'MSR26',
+        'MSR30-11F': ['MSR30-1X',u'盒式'],
+        'MSR36-': 'MSR36',
+        'MSR3600': ['MSR36',u'盒式'],
+        'MSR56-60': ['MSR56',u'机箱'],
+        'MSR50-40': ['MSR50',u'机箱'],
+        'S3100-26C-SI': ['S3100',u'盒式'],
+        'S3100-26TP-SI': ['S3100',u'盒式'],
+        'H3C S3600-52P-SI': ['S3600',u'盒式'],
+        'S3600V': 'S3600',
+        'S5120S-52P-EI': ['S5100',u'盒式'],
+        'S5120-': 'S5100',
+        'S5100-': 'S5100',
+        'S5500-': ['S5800',u'盒式'],
+        'S5800-60C-PWR': ['S5800',u'盒式'],
+        'S7506' : ['S7500',u'机箱'],
+        'S7502E': ['S7500E',u'机箱'],
+        'S7503E': ['S7500E',u'机箱'],
+        'S7506E': ['S7500E',u'机箱'],
+        'S7510E': ['S7500E',u'机箱'],
+        'SR6602': ['SR66',u'机箱'],
+        'SR6608': ['SR66',u'机箱'],
+        'VG80-20': ['VG80',u'盒式'],
+        'VG80-80': ['VG80',u'盒式'],
+        'WX5004': ['WX5000',u'盒式'],
+        'WX5510': ['WX5500E',u'盒式'],
+                   }
 
+    series = device_type.split(' ')[1].split('-')
+    print(series)
+    #TODO 根据型号获取系列
+    # print(series_dict.get(series, 'unknown'))
+    series_belong = series_catalog_dict.get(series, 'unknown')[0]
+    # print(series_belong)
     pattern_device_name = re.compile(r'DEVICE[_\s]NAME\s*:\s*(.+)\n')
     pattern_device_sn = re.compile(r'DEVICE[_\s]SERIAL[_\s]NUMBER\s*:\s*(\S+)\n')
 
     if device_type[0:3] == 'H3C':
-
-
         device_name = re.findall(pattern_device_name, manu_info)
         device_sn = re.findall(pattern_device_sn, manu_info)
         manu_info_list = [[a, b] for a, b in zip(device_name, device_sn)]
@@ -154,7 +182,16 @@ def get_device_moudle(device_type, manu_info):
             manu_info_list.append([series, '21000000000123456789'])
 
         for moudle in manu_info_list:
-            moudle.append(chassis_dict.get(moudle[0][0:6], u'板卡'))
+            try:
+                series_catalog_dict.get(moudle)
+            except TypeError:
+                moudle.append(u'板卡')
+            else:
+                moudle.append(series_catalog_dict.get(moudle)[1])
+            # if series_catalog_dict.get(moudle, u'板卡') == u'板卡':
+            #     moudle.append(u'板卡')
+            # else:
+            #     moudle.append(series_catalog_dict.get(moudle)[1])
         # print(manu_info_list)
     # else:
     #     manu_info_list = [['unknown', '   unknown']]
@@ -192,7 +229,7 @@ def count_moudle(summary_list):
     print("write_db ...................")
 
     for device in summary_list:
-        # print(device)
+        print(device)
         for num in range(len(device[1])):
             if device[1][num][0] != 'NONE':
                 c.execute("INSERT INTO DEVICE (series_belong, catalong, module_type, module_sn, bom) VALUES (?, ?, ?, ?, ?  )",
@@ -318,7 +355,7 @@ def write_xls(result, file):
     row_number = 2
 
     for line in result:
-        # print(line)
+        print(line)
         for col in range(0, len(row1) ):
             sheet1.write(row_number, col, line[col], style_content)
         row_number += 1
@@ -335,8 +372,8 @@ INPUT_DIR = r'.\\H3C-display\\'
 OUTPUT_DIR = r'.\\output\\'
 eos_data_dict = get_eos_data()
 
-files = os.listdir(r'.\\H3C-display\\')
-# files = os.listdir(r'.\\test-input\\')
+# files = os.listdir(r'.\\H3C-display\\')
+files = os.listdir(r'.\\test-input\\')
 
 # 指定输入目录中的待处理文件,进行分析汇总,输出结果文件
 for filename in files:
