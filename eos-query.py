@@ -179,7 +179,7 @@ def count_moudle(summary_list):
     c.execute("delete from DEVICE;")
     c.execute("update sqlite_sequence SET seq = 0 where name ='DEVICE';")
 
-    print("write_db ...................")
+    print("write_db .....................")
 
     #将汇总信息写入数据库，用于进行汇总统计
     for device in summary_list:
