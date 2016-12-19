@@ -213,8 +213,6 @@ def count_moudle(summary_list):
 
         result_list.append(result)
 
-    # for l1 in result_list:
-    #     print(l1)
     return result_list
 
 
