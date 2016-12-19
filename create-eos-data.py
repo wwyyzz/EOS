@@ -3,7 +3,7 @@
 """
 
 读取原始的eos数据，生成字典文件：
-{ "bom编码"：["产品线"，"所属PDT"，"EOM DCP实际"，"EOS DCP计划"，"EOS DCP实际"，"EOS公告上网实际", "EOS公告上网计划"]}
+{ "bom编码"：["EOS DCP计划"，"EOS DCP实际"，"EOS公告上网实际", "EOS公告上网计划", "EOL DCP实际", "EOL 计划"]}
 将生成的字典通过pickle 序列化保存，供查询时使用
 """
 

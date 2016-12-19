@@ -70,105 +70,72 @@ def get_device_moudle(device_type, manu_info):
     :return: 单台设备的型号、板卡名称、序列号
     """
     add_chassis = ['MSR50-40', 'MSR56-60',
-                   'S7502E', 'S7503E-S', 'S7506E', 'S7510E','S7506'
+                   'S7502E', 'S7503E-S', 'S7506E', 'S7510E','S7506',
                    'SR6608']
 
-    chassis_dict ={
-        'MSR 20': u'机箱',
-        'MSR 26': u'机箱',
-        'MSR 30': u'盒式',
-        'MSR360': u'盒式',
-        'MSR36-': u'盒式',
-        'MSR 36': u'盒式',
-        'MSR50-': u'机箱',
-        'MSR56-': u'机箱',
-        'S3100-': u'盒式',
-        'H3C S3': u'盒式',
-        'S3100V': u'盒式',
-        'S3600-': u'盒式',
-        'S3600V': u'盒式',
-        'S5120S': u'盒式',
-        'S5100-': u'盒式',
-        'S5120-': u'盒式',
-        'S5500-': u'盒式',
-        'S5800-': u'盒式',
-        'S7506': u'盒式',
-        'S7502E': u'机箱',
-        'S7503E': u'机箱',
-        'S7506E': u'机箱',
-        'S7510E': u'机箱',
-        'SR6602': u'机箱',
-        'SR6608': u'机箱',
-        'vg80-2': u'机箱',
-        'vg80-8': u'机箱',
-        'WX5004': u'盒式',
-        'WX5510': u'盒式',
-                   }
-    series_dict ={
-        'MSR20-': 'MSR20',
-        'MSR26-': 'MSR26',
-        'MSR30-': 'MSR30',
-        'MSR36-': 'MSR36',
-        'MSR360': 'MSR36',
-        'MSR56-': 'MSR50',
-        'MSR50-': 'MSR50',
-        'S3100-': 'S3100',
-        'S3100V': 'S3100',
-        'S3600-': 'S3600',
-        'S3600V': 'S3600',
-        'S5120S': 'S5100',
-        'S5120-': 'S5100',
-        'S5100-': 'S5100',
-        'S5500-': 'S5500',
-        'S5800-': 'S5800',
-        'S7506': 'S7500',
-        'S7502E': 'S7500E',
-        'S7503E': 'S7500E',
-        'S7506E': 'S7500E',
-        'S7510E': 'S7500E',
-        'SR6602': 'SR66',
-        'SR6608': 'SR66',
-        'VG80-2': 'VG80',
-        'VG80-8': 'VG80',
-        'WX5004': 'WX5000',
-        'WX5510': 'WX5500E',
-                   }
-
-    series_catalog_dict ={
-        'MSR20-': 'MSR20',
-        'MSR26-': 'MSR26',
-        'MSR30-11F': ['MSR30-1X',u'盒式'],
-        'MSR36-': 'MSR36',
-        'MSR3600': ['MSR36',u'盒式'],
-        'MSR56-60': ['MSR56',u'机箱'],
-        'MSR50-40': ['MSR50',u'机箱'],
-        'S3100-26C-SI': ['S3100',u'盒式'],
-        'S3100-26TP-SI': ['S3100',u'盒式'],
-        'H3C S3600-52P-SI': ['S3600',u'盒式'],
-        'S3600V': 'S3600',
-        'S5120S-52P-EI': ['S5100',u'盒式'],
-        'S5120-': 'S5100',
-        'S5100-': 'S5100',
-        'S5500-': ['S5800',u'盒式'],
-        'S5800-60C-PWR': ['S5800',u'盒式'],
+    series_catalog_dict_1 ={
+        'MSR 20': ['MSR20', u'盒式'],
+        'MSR20-': ['MSR20', u'盒式'],
+        'MSR26-': ['MSR26', u'盒式'],
+        'MSR 26': ['MSR26', u'盒式'],
+        'MSR 30': ['MSR30', u'盒式'],
+        'MSR30-': ['MSR30',u'盒式'],
+        'MSR 36': ['MSR36',u'盒式'],
+        'MSR36-': ['MSR36', u'盒式'],
+        'MSR360': ['MSR36',u'盒式'],
+        'MSR56-': ['MSR56',u'机箱'],
+        'MSR50-': ['MSR50',u'机箱'],
+        'S3100-': ['S3100',u'盒式'],
+        'S3100V': ['S3100', u'盒式'],
+        'S3610-': ['S3600', u'盒式'],
+        'S3600-': ['S3600', u'盒式'],
+        'S3600V': ['S3600', u'盒式'],
+        'S5120S': ['S5100',u'盒式'],
+        'S5120-': ['S5100',u'盒式'],
+        'S5130-': ['S5100', u'盒式'],
+        'S5100-': ['S5100',u'盒式'],
+        'S5500-': ['S5500',u'盒式'],
+        'S5800-': ['S5800',u'盒式'],
         'S7506' : ['S7500',u'机箱'],
         'S7502E': ['S7500E',u'机箱'],
         'S7503E': ['S7500E',u'机箱'],
         'S7506E': ['S7500E',u'机箱'],
         'S7510E': ['S7500E',u'机箱'],
+        'S10504': ['S10500', u'机箱'],
+        'LS-105': ['S10500', u'机箱'],
         'SR6602': ['SR66',u'机箱'],
         'SR6608': ['SR66',u'机箱'],
-        'VG80-20': ['VG80',u'盒式'],
-        'VG80-80': ['VG80',u'盒式'],
+        'VG80-2': ['VG80',u'盒式'],
+        'VG80-8': ['VG80',u'盒式'],
+        'vg80-2': ['VG80', u'盒式'],
+        'vg80-8': ['VG80', u'盒式'],
+        'WX3010': ['WX3000', u'盒式'],
         'WX5004': ['WX5000',u'盒式'],
         'WX5510': ['WX5500E',u'盒式'],
                    }
+    series_catalog_dict_2 = {
+        '20-21': ['MSR20', u'盒式'],
+        '30-40': ['MSR30', u'盒式'],
+        '50-60': ['MSR50', u'机箱'],
+        'H3C S3600-52P-SI': ['S3600', u'盒式'],
+        'H3C S3100V2-26TP-EI': ['S3100', u'盒式'],
+        'H3C S3100V2-16TP-PWR-EI': ['S3100', u'盒式'],
+        'H3C S3100V2-16TP-SI': ['S3100', u'盒式'],
+        'H3C S3100V2-26TP-PWR-EI': ['S3100', u'盒式'],
+        'H3C S3100V2-26TP-SI': ['S3100', u'盒式'],
+        'H3C S3100V2-8TP-SI': ['S3100', u'盒式'],
+        'S7506': ['S7500', u'机箱'],
+    }
 
-    series = device_type.split(' ')[1].split('-')
-    print(series)
+    series = device_type.split(' ')[1]
+    # print(series)
     #TODO 根据型号获取系列
-    # print(series_dict.get(series, 'unknown'))
-    series_belong = series_catalog_dict.get(series, 'unknown')[0]
+    # print(series_catalog_dict_1.get(series, ['unknown', '板卡']))
+
+    try:
+        series_belong = series_catalog_dict_1.get(series[0:6])[0]
+    except TypeError:
+        series_belong = series_catalog_dict_2.get(series, ['unknown', '板卡'])[0]
     # print(series_belong)
     pattern_device_name = re.compile(r'DEVICE[_\s]NAME\s*:\s*(.+)\n')
     pattern_device_sn = re.compile(r'DEVICE[_\s]SERIAL[_\s]NUMBER\s*:\s*(\S+)\n')
@@ -178,20 +145,23 @@ def get_device_moudle(device_type, manu_info):
         device_sn = re.findall(pattern_device_sn, manu_info)
         manu_info_list = [[a, b] for a, b in zip(device_name, device_sn)]
 
-        if series in  add_chassis:
+        if series in add_chassis:
             manu_info_list.append([series, '21000000000123456789'])
 
         for moudle in manu_info_list:
-            try:
-                series_catalog_dict.get(moudle)
-            except TypeError:
-                moudle.append(u'板卡')
-            else:
-                moudle.append(series_catalog_dict.get(moudle)[1])
-            # if series_catalog_dict.get(moudle, u'板卡') == u'板卡':
+            # try:
+            #     series_catalog_dict.get(moudle)
+            # except TypeError:
             #     moudle.append(u'板卡')
             # else:
             #     moudle.append(series_catalog_dict.get(moudle)[1])
+            # print(series_catalog_dict_1.get(moudle[0], ['unknown', '板卡'])[1])
+            try:
+                moudle.append(series_catalog_dict_1.get(moudle[0][0:6])[1])
+            except TypeError:
+                moudle.append(series_catalog_dict_2.get(moudle[0], ['unknown', '板卡'])[1])
+
+            # moudle.append(series_catalog_dict_1.get(moudle[0], ['unknown', '板卡'])[1])
         # print(manu_info_list)
     # else:
     #     manu_info_list = [['unknown', '   unknown']]
@@ -208,15 +178,6 @@ def count_moudle(summary_list):
     将输入列表保存到数据库中，使用SQL进行数据汇总统计
     返回：基于型号、板卡的数量汇总
     """
-    device_list = []
-    # for l2 in summary_list:
-    #     print(l2)
-    #     device_list.append(l2[0])
-    # aaa = Counter(device_list)
-    # print (aaa)
-    # for l3 in aaa:
-    #     l4 = [l3, aaa.get(l3)]
-    #     print(l4)
 
     # conn = sqlite3.connect(r'D:\1-MY\2-Code\Python\EOS\device.db')
     # conn = sqlite3.connect(r'C:\MyCode\EOS\device.db')
@@ -229,7 +190,7 @@ def count_moudle(summary_list):
     print("write_db ...................")
 
     for device in summary_list:
-        print(device)
+        # print(device)
         for num in range(len(device[1])):
             if device[1][num][0] != 'NONE':
                 c.execute("INSERT INTO DEVICE (series_belong, catalong, module_type, module_sn, bom) VALUES (?, ?, ?, ?, ?  )",
@@ -252,9 +213,9 @@ def count_moudle(summary_list):
         #    result_list.append((list)eos_data.get(moudle[2]))
         eos_query = eos_data_dict.get(moudle[4])
         if eos_query is not None:
-            result = moudle_list[0:4] + eos_query
+            result = moudle_list[0:4] + eos_query + [' '] * 4
         else:
-            result = moudle_list[0:4] + ['N/A'] * 4
+            result = moudle_list[0:4] + ['N/A'] * 6 + [' '] * 4
 
         result_list.append(result)
 
@@ -344,9 +305,13 @@ def write_xls(result, file):
 
     # 写入表头数据
     row0 = [u'华三已停止或即将停止软硬件支持的设备统计']
-    row1 = [u'所属系列', u'类别', u'数量',u'型号明细'
-            u"停止销售日", u"软件停止维护日",u"停止服务日",u"后继产品"]
-    sheet1.write_merge(0, 0, 0, 6, row0, style_title)
+    row1 = [u'所属系列', u'类别', u'数量',u'型号明细',
+            u"EOS DCP实际时间", u"EOS DCP计划时间",
+            u"EOS公告上网实际时间", u"EOS公告上网计划时间",
+            u"EOL DCP实际", u"EOL DCP计划",
+            u"停止销售日", u"软件停止维护日",u"停止服务日",u"后继产品",
+            ]
+    sheet1.write_merge(0, 0, 0, 13, row0, style_title)
     for i in range(0, len(row1)):
         sheet1.col(i).width = 256 * 20
         sheet1.write(1, i, row1[i], style_title)
@@ -355,7 +320,7 @@ def write_xls(result, file):
     row_number = 2
 
     for line in result:
-        print(line)
+        # print(line)
         for col in range(0, len(row1) ):
             sheet1.write(row_number, col, line[col], style_content)
         row_number += 1
@@ -372,8 +337,8 @@ INPUT_DIR = r'.\\H3C-display\\'
 OUTPUT_DIR = r'.\\output\\'
 eos_data_dict = get_eos_data()
 
-# files = os.listdir(r'.\\H3C-display\\')
-files = os.listdir(r'.\\test-input\\')
+files = os.listdir(r'.\\H3C-display\\')
+# files = os.listdir(r'.\\test-input\\')
 
 # 指定输入目录中的待处理文件,进行分析汇总,输出结果文件
 for filename in files:
