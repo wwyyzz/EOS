@@ -196,7 +196,7 @@ def count_moudle(summary_list):
         "ORDER BY series_belong, catalong, module_type")
     summary_of_device = c.fetchall()
     c.close()
-    # print ("summary result :-----------------")
+    # print ("summary result :----------------")
     # print(summary_of_device)
 
     # 通过bom 编码关联eox 数据, 生成最终结果列表
