@@ -70,8 +70,8 @@ def get_device_moudle(device_type, manu_info):
     :return: 单台设备的型号、板卡名称、序列号
     """
     # 部分设备disp manu_info 中没有主机信息，通过查找映射表增加主机信息，用于统计机箱数量
-    add_chassis = ['MSR50-40', 'MSR56-60',
-                   'S7502E', 'S7503E-S', 'S7506E', 'S7510E','S7506',
+    add_chassis = ['MSR30-20', 'MSR50-40', 'MSR50-60','MSR56-60',
+                   'S7502E', 'S7503E-S', 'S7503E', 'S7506E', 'S7510E','S7506',
                    'SR6608']
 
     # 系列　类型映射字典，匹配series部分内容
@@ -118,9 +118,12 @@ def get_device_moudle(device_type, manu_info):
     # 系列　类型映射字典，精确匹配series　或moudle 内容
     series_catalog_dict_2 = {
         '20-21': ['MSR20', u'盒式'],
+        '30-20': ['MSR30', u'盒式'],
         '30-40': ['MSR30', u'盒式'],
+        '30-60': ['MSR30', u'盒式'],
         '50-60': ['MSR50', u'机箱'],
         'H3C S3600-52P-SI': ['S3600', u'盒式'],
+        'H3C S3100V2-8TP-EI': ['S3100', u'盒式'],
         'H3C S3100V2-26TP-EI': ['S3100', u'盒式'],
         'H3C S3100V2-16TP-PWR-EI': ['S3100', u'盒式'],
         'H3C S3100V2-16TP-SI': ['S3100', u'盒式'],
@@ -196,8 +199,6 @@ def count_moudle(summary_list):
         "ORDER BY series_belong, catalong, module_type")
     summary_of_device = c.fetchall()
     c.close()
-    # print ("summary result :----------------")
-    # print(summary_of_device)
 
     # 通过bom 编码关联eox 数据, 生成最终结果列表
     result_list = []
@@ -207,9 +208,9 @@ def count_moudle(summary_list):
         #    result_list.append((list)eos_data.get(moudle[2]))
         eos_query = eos_data_dict.get(moudle[4])
         if eos_query is not None:
-            result = moudle_list[0:4] + eos_query + [' '] * 4
+            result = moudle_list[0:4] + eos_query + [' ']
         else:
-            result = moudle_list[0:4] + ['N/A'] * 6 + [' '] * 4
+            result = moudle_list[0:4] + ['N/A'] * 3 + [' ']
 
         result_list.append(result)
 
@@ -241,8 +242,17 @@ def get_all_devices_moudle(file):
 
     all_devices_moudle_duplicate_removal.sort()
 
+    # 测试 板卡列表中是否有机箱或者盒式,
     # for l2 in all_devices_moudle_duplicate_removal:
-    #     print(l2)
+    #     flag = False
+    #     for l3 in l2[1]:
+    #         # print(l3[2])
+    #         if l3[2] == u'机箱' or l3[2] == u'盒式':
+    #             # print("OK")
+    #             flag = True
+    #     if flag == False:
+    #         print ("ERROR")
+    #         print(l2)
     return all_devices_moudle_duplicate_removal
 
 
@@ -293,12 +303,9 @@ def write_xls(result, file):
     # 写入表头数据
     row0 = [u'华三已停止或即将停止软硬件支持的设备统计']
     row1 = [u'所属系列', u'类别', u'数量',u'型号明细',
-            u"EOS DCP实际时间", u"EOS DCP计划时间",
-            u"EOS公告上网实际时间", u"EOS公告上网计划时间",
-            u"EOL DCP实际", u"EOL DCP计划",
             u"停止销售日", u"软件停止维护日",u"停止服务日",u"后继产品",
             ]
-    sheet1.write_merge(0, 0, 0, 13, row0, style_title)
+    sheet1.write_merge(0, 0, 0, 7, row0, style_title)
     for i in range(0, len(row1)):
         sheet1.col(i).width = 256 * 20
         sheet1.write(1, i, row1[i], style_title)

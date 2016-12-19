@@ -28,9 +28,23 @@ lines = get_data(PATH)
 for line in lines:
     # print(line)
     field = line.replace('\n', '').split(',')
+    print("eos date------------------------")
     print (field[2])
-    print(field[5:7] + field[10:12] + field[7:9] )
-    eos_data_dict[field[2]] = field[5:7] + field[10:12] + field[7:9]
+    print(field[5:7] + field[7:9] )
+    if field[5] != '':
+        eos_date = field[5]
+    else:
+        eos_date = field[6]
+    eofix_date = str(int(eos_date[0:4]) + 2) + eos_date[4:]
+    print (eofix_date)
+
+    if field[7] != '':
+        eol_date = field[7]
+    else:
+        eol_date = field[8]
+
+    print( [eos_date, eofix_date, eol_date])
+    eos_data_dict[field[2]] = [eos_date, eofix_date, eol_date]
 
 print(eos_data_dict["0231A84Q"])
 print(eos_data_dict)
