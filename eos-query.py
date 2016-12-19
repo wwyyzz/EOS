@@ -45,12 +45,12 @@ def get_device_type(version_info):
     if h3c_match is not None:
         device_type = h3c_match.group(1)
     else:
-        other_match = re.search(pattern_other, version_info)
-        if other_match is not None:
-            device_type = other_match.group(1)
-        else:
-            device_type = "unknown device"
-
+        # other_match = re.search(pattern_other, version_info)
+        # if other_match is not None:
+        #     device_type = other_match.group(1)
+        # else:
+        #     device_type = "unknown device"
+        device_type = "unknown device"
     return device_type
 
 
@@ -69,10 +69,12 @@ def get_device_moudle(device_type, manu_info):
     :param manu_info:
     :return: 单台设备的型号、板卡名称、序列号
     """
+    # 部分设备disp manu_info 中没有主机信息，通过查找映射表增加主机信息，用于统计机箱数量
     add_chassis = ['MSR50-40', 'MSR56-60',
                    'S7502E', 'S7503E-S', 'S7506E', 'S7510E','S7506',
                    'SR6608']
 
+    # 系列　类型映射字典，匹配series部分内容
     series_catalog_dict_1 ={
         'MSR 20': ['MSR20', u'盒式'],
         'MSR20-': ['MSR20', u'盒式'],
@@ -113,6 +115,7 @@ def get_device_moudle(device_type, manu_info):
         'WX5004': ['WX5000',u'盒式'],
         'WX5510': ['WX5500E',u'盒式'],
                    }
+    # 系列　类型映射字典，精确匹配series　或moudle 内容
     series_catalog_dict_2 = {
         '20-21': ['MSR20', u'盒式'],
         '30-40': ['MSR30', u'盒式'],
@@ -128,15 +131,13 @@ def get_device_moudle(device_type, manu_info):
     }
 
     series = device_type.split(' ')[1]
-    # print(series)
-    #TODO 根据型号获取系列
-    # print(series_catalog_dict_1.get(series, ['unknown', '板卡']))
 
+    # 二次查找获取所属系列
     try:
         series_belong = series_catalog_dict_1.get(series[0:6])[0]
     except TypeError:
         series_belong = series_catalog_dict_2.get(series, ['unknown', '板卡'])[0]
-    # print(series_belong)
+
     pattern_device_name = re.compile(r'DEVICE[_\s]NAME\s*:\s*(.+)\n')
     pattern_device_sn = re.compile(r'DEVICE[_\s]SERIAL[_\s]NUMBER\s*:\s*(\S+)\n')
 
@@ -149,22 +150,13 @@ def get_device_moudle(device_type, manu_info):
             manu_info_list.append([series, '21000000000123456789'])
 
         for moudle in manu_info_list:
-            # try:
-            #     series_catalog_dict.get(moudle)
-            # except TypeError:
-            #     moudle.append(u'板卡')
-            # else:
-            #     moudle.append(series_catalog_dict.get(moudle)[1])
-            # print(series_catalog_dict_1.get(moudle[0], ['unknown', '板卡'])[1])
+            # 二次查找确定类型，添加到模块列表的尾部
+            # 先没有通过　moudle[0][0:6]　查找series_catalodict_1　字典，没有找到则继续series_catalog_dict_2查找字典
+            # 减少字典的数据量
             try:
                 moudle.append(series_catalog_dict_1.get(moudle[0][0:6])[1])
             except TypeError:
                 moudle.append(series_catalog_dict_2.get(moudle[0], ['unknown', '板卡'])[1])
-
-            # moudle.append(series_catalog_dict_1.get(moudle[0], ['unknown', '板卡'])[1])
-        # print(manu_info_list)
-    # else:
-    #     manu_info_list = [['unknown', '   unknown']]
 
     device_moudle = [[device_type, series_belong], manu_info_list]
     # print("device_info ============")
@@ -189,6 +181,7 @@ def count_moudle(summary_list):
 
     print("write_db ...................")
 
+    #将汇总信息写入数据库，用于进行汇总统计
     for device in summary_list:
         # print(device)
         for num in range(len(device[1])):
@@ -203,9 +196,10 @@ def count_moudle(summary_list):
         "ORDER BY series_belong, catalong, module_type")
     summary_of_device = c.fetchall()
     c.close()
-    print ("summary result :-----------------")
+    # print ("summary result :-----------------")
     # print(summary_of_device)
 
+    # 通过bom 编码关联eox 数据, 生成最终结果列表
     result_list = []
     for moudle in summary_of_device:
         # print(moudle)
@@ -297,11 +291,6 @@ def write_xls(result, file):
     style_content = xlwt.XFStyle()
     style_content.pattern = pattern_content
     style_content.borders = borders
-
-    # row0 = [u'型号', u'板卡类型', u'BOM编码', u'数量',
-    #         u"EOS DCP实际时间", u"EOS DCP计划时间",
-    #         u"EOS公告上网实际时间", u"EOS公告上网计划时间",
-    #         u"EOL DCP实际", u"EOL DCP计划"]
 
     # 写入表头数据
     row0 = [u'华三已停止或即将停止软硬件支持的设备统计']
